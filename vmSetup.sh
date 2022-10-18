@@ -38,14 +38,14 @@ function unattendedInstall() {
 VBoxManage unattended install $1 --iso=$2 --hostname=$1.ws2-2223-ube.hogent --user=admin --password=Admin2021 --install-additions --additions-iso=$3 --full-user-name=Administrator --country=BE --start-vm=gui --post-install-command="shutdown /r /t 0"
 }
 
-#newVM "dc" "Windows2019_64" 2 2048 39 "./vm/DC.vdi" 20480 $windowsServerIso
+newVM "dc" "Windows2019_64" 2 2048 39 "./vm/DC.vdi" 20480 $windowsServerIso
 newVM "web" "Windows2019_64" 2 2048 39 "./vm/Wev.vdi" 20480 $windowsServerIso
 #newVM "mail" "Windows2019_64" 2 6144 39 "./vm/Mail.vdi" 20480 $windowsServerIso $exchangeIso
-#newVM "ws1" "Windows10_64" 1 2048 128 "./vm/ws1.vdi" 20480 $windowsClientIso
+newVM "ws1" "Windows10_64" 1 2048 128 "./vm/ws1.vdi" 20480 $windowsClientIso
 
-#unattendedInstall "dc" $windowsServerIso $guestAdditionsIso
+unattendedInstall "dc" $windowsServerIso $guestAdditionsIso
 unattendedInstall "web" $windowsServerIso $guestAdditionsIso
 #unattendedInstall "mail" $windowsServerIso $guestAdditionsIso
-#unattendedInstall "ws1" $windowsClientIso $guestAdditionsIso
+unattendedInstall "ws1" $windowsClientIso $guestAdditionsIso
 
 
