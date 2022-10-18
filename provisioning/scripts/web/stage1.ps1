@@ -46,10 +46,17 @@ try {
     New-NetIPAddress @InterfaceConfig -ErrorAction Stop | out-null
     Set-DnsClientServerAddress @dnsConfig -ErrorAction Stop | out-null
     sleep 5
-    Write-Host "Network configured" -ForegroundColor Green
 }
 catch {
-    Write-Warning -Message $("Failed to set new IPv4 addressError: "+ $_.Exception.Message)
+    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
+}
+
+try {
+    Write-Host "Copying scripts to C drive" -ForegroundColor Green
+    Copy-Item -Path "Z:\Scripts" -Destination "C:\Scripts" -Recurse -ErrorAction Stop
+}
+catch {
+    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
 }
 
 try {
@@ -62,13 +69,21 @@ try {
     Set-DhcpServerV4OptionValue @DNSOption -ErrorAction Stop
 }
 catch {
-    Write-Warning -Message $("Failed to setup DHCP server: "+ $_.Exception.Message)
+    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
 }
 
 try {
+    mv Z:\web\web2.ps1 C:\web\web2.ps1
+}
+catch {
+    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
+}
+
+try {
+    Write-Host "Joining domain" -ForegroundColor Green
     $credential = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList "admin", (ConvertTo-SecureString -AsPlainText "Admin2021" -Force)
     Add-Computer -Domain "ws2-2223-ube.hogent" -Credential $credential -Restart -Force
 }
 catch {
-    Write-Warning -Message $("Failed to join domain: "+ $_.Exception.Message)
+    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
 }

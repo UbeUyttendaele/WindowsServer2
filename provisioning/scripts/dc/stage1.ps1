@@ -29,7 +29,15 @@ try {
     Write-Host "Configured network settings" -ForegroundColor Green
 }
 catch {
-    Write-Warning -Message $("Failed to set new IPv4 addressError: "+ $_.Exception.Message)
+    Write-Warning -Message $("Task failed:"+ $_.Exception.Message)
+}
+# Copy scripts to c:\scripts
+try {
+    Write-Host "Copying scripts to C drive" -ForegroundColor Green
+    Copy-Item -Path "Z:\Scripts" -Destination "C:\Scripts" -Recurse -ErrorAction Stop
+}
+catch {
+    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
 }
 
 
@@ -41,5 +49,5 @@ try {
     shutdown /r /t 0
 }
 catch {
-    Write-Warning -Message $("Failed to install services: "+ $_.Exception.Message)
+    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
 }

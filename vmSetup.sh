@@ -24,10 +24,12 @@ if [ $1 = "dc" ]; then
 else
     VBoxManage modifyvm $1 --cpus $3 --memory $4 --vram $5 --nic1 intnet
 fi
+
 vboxmanage storagectl $1 --name "IDE controller" --add sata --controller IntelAHCI --portcount 2 --bootable on
 VBoxManage createmedium disk --filename $6 --size $7
 vboxmanage storageattach $1 --storagectl "IDE controller" --device 0 --port 0 --type hdd --medium $6
 vboxmanage storageattach $1 --storagectl "IDE controller" --device 0 --port 1 --type dvddrive --medium $8
+
 if [ $1 = "Mail" ]; then
 vboxmanage storageattach $1 --storagectl "IDE controller" --device 0 --port 2 --type dvddrive --medium $9
 fi
@@ -38,14 +40,34 @@ function unattendedInstall() {
 VBoxManage unattended install $1 --iso=$2 --hostname=$1.ws2-2223-ube.hogent --user=admin --password=Admin2021 --install-additions --additions-iso=$3 --full-user-name=Administrator --country=BE --start-vm=gui --post-install-command="shutdown /r /t 0"
 }
 
-newVM "dc" "Windows2019_64" 2 2048 39 "./vm/DC.vdi" 20480 $windowsServerIso
-newVM "web" "Windows2019_64" 2 2048 39 "./vm/Wev.vdi" 20480 $windowsServerIso
-#newVM "mail" "Windows2019_64" 2 6144 39 "./vm/Mail.vdi" 20480 $windowsServerIso $exchangeIso
-newVM "ws1" "Windows10_64" 1 2048 128 "./vm/ws1.vdi" 20480 $windowsClientIso
+function setupVM() {
+for i in $*; do 
 
-unattendedInstall "dc" $windowsServerIso $guestAdditionsIso
-unattendedInstall "web" $windowsServerIso $guestAdditionsIso
-#unattendedInstall "mail" $windowsServerIso $guestAdditionsIso
-unattendedInstall "ws1" $windowsClientIso $guestAdditionsIso
+    case $i in
+
+    dc)
+        newVM "dc" "Windows2019_64" 2 2048 39 "./vm/dc.vdi" 20480 $windowsServerIso
+        unattendedInstall "dc" $windowsServerIso $guestAdditionsIso
+        ;;
+
+    web)
+        newVM "web" "Windows2019_64" 2 2048 39 "./vm/web.vdi" 20480 $windowsServerIso
+        unattendedInstall "web" $windowsServerIso $guestAdditionsIso
+        ;;
+
+    mail)
+        newVM "mail" "Windows2019_64" 2 6144 39 "./vm/mail.vdi" 20480 $windowsServerIso $exchangeIso
+        unattendedInstall "mail" $windowsServerIso $guestAdditionsIso
+        ;;
+
+    *)
+        newVM $i "Windows10_64" 1 2048 128 "./vm/$i.vdi" 20480 $windowsClientIso
+        unattendedInstall $i $windowsClientIso $guestAdditionsIso
+        ;;
+    esac
+
+done
+}
 
 
+setupVM dc web ws1

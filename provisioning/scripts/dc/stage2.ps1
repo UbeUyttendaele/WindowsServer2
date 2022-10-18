@@ -3,7 +3,7 @@ try {
     new-netnat -name "NAT" -internalipinterfaceaddressprefix "192.168.22.0/24"
 }
 catch {
-    Write-Warning -Message $("Failed to complete task:"+ $_.Exception.Message)
+    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
 }
 
 
@@ -24,6 +24,6 @@ try {
     -Force:$true
 }
 catch {
-    Write-Warning -Message $("Failed to complete task:"+ $_.Exception.Message)
+    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
 }
 
