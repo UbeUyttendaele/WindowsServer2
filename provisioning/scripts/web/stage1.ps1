@@ -73,13 +73,6 @@ catch {
 }
 
 try {
-    mv Z:\web\web2.ps1 C:\web\web2.ps1
-}
-catch {
-    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
-}
-
-try {
     Write-Host "Joining domain" -ForegroundColor Green
     $credential = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList "admin", (ConvertTo-SecureString -AsPlainText "Admin2021" -Force)
     Add-Computer -Domain "ws2-2223-ube.hogent" -Credential $credential -Restart -Force

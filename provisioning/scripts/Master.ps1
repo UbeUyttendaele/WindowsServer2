@@ -1,48 +1,30 @@
 param (
-    [String]$deviceType="1"
+    [String]$deviceType="1",
     [String]$stage="2"
 )
 
 
-switch ($hostname) {
-  "dc" {
-        switch ($stage) {
-          "1" { .\dc\stage1.ps1 ; break }
-          "2" { .\dc\stage2.ps1 ; break }
-          "3" { .\dc\stage3.ps1 ; break }
-          default { "Uh, something unexpected happened" }
-        }  
-        ; break 
+switch ($deviceType) {
+  dc {
+    Write-Host "Device type found"
+    $path = ".\dc\stage$stage.ps1"
       }
-  "web" {
-        switch ($stage) {
-          "1" { .\web\stage1.ps1 ; break }
-          "2" { .\web\stage2.ps1 ; break }
-          "3" { .\web\stage3.ps1 ; break }
-          default { "Uh, something unexpected happened" }
-        }  
-        ; break 
+  web {
+    Write-Host "Device type found"
+    $path = ".\web\stage$stage.ps1"
       }
-  "mail" {
-        switch ($stage) {
-          "1" { .\mail\stage1.ps1 ; break }
-          "2" { .\mail\stage2.ps1 ; break }
-          "3" { .\mail\stage3.ps1 ; break }
-          default { "Uh, something unexpected happened" }
-        }  
-        ; break 
+  mail {
+    Write-Host "Device type found"
+    $path = ".\mail\stage$stage.ps1"
     }
-  "ws" {
-        switch ($stage) {
-          "1" { .\ws\stage1.ps1 ; break }
-          "2" { .\dc\stage2.ps1 ; break }
-          "3" { .\dc\stage3.ps1 ; break }
-          default { "Uh, something unexpected happened" }
-        }  
-        ; break 
+  ws {
+    Write-Host "Device type found"
+    $path = ".\ws\stage$stage.ps1"
       }
-  default { "Uh, something unexpected happened" }
+  default { "Uh, something unexpected happened, deviceType not found"
+  ; break}
 }
+invoke-expression $path  
 
 
 

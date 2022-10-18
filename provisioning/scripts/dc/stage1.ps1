@@ -26,7 +26,6 @@ try {
     New-NetIPAddress @InterfaceConfig -ErrorAction Stop | out-null
     Set-DnsClientServerAddress @dnsConfig -ErrorAction Stop | out-null
     sleep 5
-    Write-Host "Configured network settings" -ForegroundColor Green
 }
 catch {
     Write-Warning -Message $("Task failed:"+ $_.Exception.Message)
@@ -34,7 +33,7 @@ catch {
 # Copy scripts to c:\scripts
 try {
     Write-Host "Copying scripts to C drive" -ForegroundColor Green
-    Copy-Item -Path "Z:\Scripts" -Destination "C:\Scripts" -Recurse -ErrorAction Stop
+    Copy-Item -Path "Z:\scripts" -Destination "C:\scripts" -Recurse -ErrorAction Stop
 }
 catch {
     Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
