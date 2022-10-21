@@ -37,7 +37,7 @@ vboxmanage sharedfolder add $1 --name "provisioning" --hostpath "./provisioning"
 }
 
 function unattendedInstall() {
-VBoxManage unattended install $1 --iso=$2 --hostname=$1.ws2-2223-ube.hogent --user=admin --password=Admin2021 --install-additions --additions-iso=$3 --full-user-name=Administrator --country=BE --start-vm=gui --post-install-command="shutdown /r /t 0"
+VBoxManage unattended install $1 --iso=$2 --hostname=$1.ws2-2223-ube.hogent --user=admin --password=Admin2021 --install-additions --additions-iso=$3 --full-user-name=Administrator --country=BE --image-index=$4 --start-vm=gui --post-install-command="shutdown /r /t 0"
 }
 
 function setupVM() {
@@ -47,22 +47,22 @@ for i in $*; do
 
     dc)
         newVM "dc" "Windows2019_64" 2 2048 39 "./vm/dc.vdi" 20480 $windowsServerIso
-        unattendedInstall "dc" $windowsServerIso $guestAdditionsIso
+        unattendedInstall "dc" $windowsServerIso $guestAdditionsIso 2
         ;;
 
     web)
         newVM "web" "Windows2019_64" 2 2048 39 "./vm/web.vdi" 20480 $windowsServerIso
-        unattendedInstall "web" $windowsServerIso $guestAdditionsIso
+        unattendedInstall "web" $windowsServerIso $guestAdditionsIso 1
         ;;
 
     mail)
         newVM "mail" "Windows2019_64" 2 6144 39 "./vm/mail.vdi" 20480 $windowsServerIso $exchangeIso
-        unattendedInstall "mail" $windowsServerIso $guestAdditionsIso
+        unattendedInstall "mail" $windowsServerIso $guestAdditionsIso 1
         ;;
 
     *)
         newVM $i "Windows10_64" 1 2048 128 "./vm/$i.vdi" 20480 $windowsClientIso
-        unattendedInstall $i $windowsClientIso $guestAdditionsIso
+        unattendedInstall $i $windowsClientIso $guestAdditionsIso 1
         ;;
     esac
 

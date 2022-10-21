@@ -7,12 +7,6 @@ $pass2    = "Admin2021" | ConvertTo-SecureString -asPlainText -Force
 $lcred      = New-Object System.Management.Automation.PsCredential($user2, $pass2)
 $credential = New-Object System.Management.Automation.PSCredential($username, $password)
 
-
-
-
-
-
-
 try {
     Write-Host "Joining domain" -ForegroundColor Green
     Add-Computer -DomainName $domain -Credential $credential -LocalCredential $lcred -Restart
