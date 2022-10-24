@@ -29,9 +29,9 @@ try {
     -ForestMode "WinThreshold" `
     -InstallDns:$true `
     -LogPath "C:\Windows\NTDS" `
-    -NoRebootOnCompletion:$false `
+    -NoRebootOnCompletion:$true `
     -SysvolPath "C:\Windows\SYSVOL" `
-    -Force:$true
+    -Force:$true | out-null
 }
 catch {
     Write-Warning -Message $("Task failed: "+ $_.Exception.Message)

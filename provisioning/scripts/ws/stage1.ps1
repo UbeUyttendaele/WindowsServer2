@@ -9,7 +9,7 @@ $credential = New-Object System.Management.Automation.PSCredential($username, $p
 
 try {
     Write-Host "Joining domain" -ForegroundColor Green
-    Add-Computer -DomainName $domain -Credential $credential -LocalCredential $lcred -Restart
+    Add-Computer -DomainName $domain -Credential $credential -LocalCredential $lcred -Restart | out-null
 }
 catch {
     Write-Warning -Message $("Task failed: "+ $_.Exception.Message)

@@ -52,21 +52,13 @@ catch {
 }
 
 try {
-    Write-Host "Copying scripts to C drive" -ForegroundColor Green
-    Copy-Item -Path "Z:\Scripts" -Destination "C:\Scripts" -Recurse -ErrorAction Stop
-}
-catch {
-    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
-}
-
-try {
     Write-Host "Configuring DHCP" -ForegroundColor Green
-    Install-WindowsFeature -Name 'DHCP' -IncludeManagementTools -ErrorAction Stop
-    netsh dhcp add securitygroups
-    Restart-Service -Name 'dhcpserver'
-    Add-DhcpServerV4Scope @Scope -ErrorAction Stop
-    Set-DhcpServerV4OptionValue @GatewayOption -ErrorAction Stop
-    Set-DhcpServerV4OptionValue @DNSOption -ErrorAction Stop
+    Install-WindowsFeature -Name 'DHCP' -IncludeManagementTools -ErrorAction Stop | out-null
+    netsh dhcp add securitygroups | out-null
+    Restart-Service -Name 'dhcpserver' | out-null
+    Add-DhcpServerV4Scope @Scope -ErrorAction Stop | out-null
+    Set-DhcpServerV4OptionValue @GatewayOption -ErrorAction Stop | out-null
+    Set-DhcpServerV4OptionValue @DNSOption -ErrorAction Stop | out-null
 }
 catch {
     Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
@@ -75,7 +67,7 @@ catch {
 try {
     Write-Host "Joining domain" -ForegroundColor Green
     $credential = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList "admin", (ConvertTo-SecureString -AsPlainText "Admin2021" -Force)
-    Add-Computer -Domain "ws2-2223-ube.hogent" -Credential $credential -Restart -Force
+    Add-Computer -Domain "ws2-2223-ube.hogent" -Credential $credential -Force | out-null
 }
 catch {
     Write-Warning -Message $("Task failed: "+ $_.Exception.Message)

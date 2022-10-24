@@ -43,9 +43,8 @@ catch {
 #Install services
 try {
     Write-Host "Installing the services, this may take a while." -ForegroundColor Green
-    Add-WindowsFeature AD-Domain-Services -IncludeManagementTools -ErrorAction Stop
-    Add-WindowsFeature RemoteAccess, Routing -ErrorAction Stop
-    shutdown /r /t 0
+    Add-WindowsFeature AD-Domain-Services -IncludeManagementTools -ErrorAction Stop | out-null
+    Add-WindowsFeature RemoteAccess, Routing -ErrorAction Stop | out-null
 }
 catch {
     Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
