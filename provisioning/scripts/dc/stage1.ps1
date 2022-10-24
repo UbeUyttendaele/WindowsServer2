@@ -22,7 +22,7 @@ $InterfaceConfig = @{
 
 # Set ip address of the second interface to 192.168.22.1
 try {
-    Write-Host "Configuring network settings." -ForegroundColor Green
+    Write-Host "Configuring network settings." -ForegroundColor yellow
     New-NetIPAddress @InterfaceConfig -ErrorAction Stop | out-null
     Set-DnsClientServerAddress @dnsConfig -ErrorAction Stop | out-null
     sleep 5
@@ -32,7 +32,7 @@ catch {
 }
 # Copy scripts to c:\scripts
 try {
-    Write-Host "Copying scripts to C drive" -ForegroundColor Green
+    Write-Host "Copying scripts to C drive" -ForegroundColor yellow
     Copy-Item -Path "Z:\scripts" -Destination "C:\scripts" -Recurse -ErrorAction Stop
 }
 catch {
@@ -42,7 +42,7 @@ catch {
 
 #Install services
 try {
-    Write-Host "Installing the services, this may take a while." -ForegroundColor Green
+    Write-Host "Installing the services, this may take a while." -ForegroundColor yellow
     Add-WindowsFeature AD-Domain-Services -IncludeManagementTools -ErrorAction Stop | out-null
     Add-WindowsFeature RemoteAccess, Routing -ErrorAction Stop | out-null
 }

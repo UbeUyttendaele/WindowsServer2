@@ -1,5 +1,5 @@
 try {
-    Write-Host "Authorezing DHCP in domain" -ForegroundColor Green
+    Write-Host "Allowing DHCP in domain" -ForegroundColor yellow
     Add-DhcpServerInDC -ErrorAction Stop 
 }
 catch {
@@ -12,7 +12,7 @@ try {
     Add-DnsServerSecondaryZone -MasterServers 192.168.22.1 -Name "ws2-2223-ube.hogent" -ZoneFile ws2-2223-ube.hogent | out-null
 }
 catch {
-    {1:<#Do this if a terminating exception happens#>}
+    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
 }
 
 

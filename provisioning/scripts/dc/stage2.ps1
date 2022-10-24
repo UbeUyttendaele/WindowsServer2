@@ -1,6 +1,6 @@
 
 try {
-    Write-Host "Configuring NAT" -ForegroundColor Green
+    Write-Host "Configuring NAT" -ForegroundColor yellow
     new-netnat -name "NAT" -internalipinterfaceaddressprefix "192.168.22.0/24"
 }
 catch {
@@ -8,7 +8,7 @@ catch {
 }
 
 try {
-    Write-Host "Configuring DNS" -ForegroundColor Green
+    Write-Host "Configuring DNS" -ForegroundColor yellow
     Add-DnsServerResourceRecord -ComputerName dc -ZoneName ws2-2223-ube.hogent -NS -NameServer web -name web.ws2-2223-ube.hogent
     Set-DnsServerPrimaryZone -ComputerName dc -ZoneName ws2-2223-ube.hogent -SecureSecondaries TransferToZoneNameServer -Notify Notify
 }

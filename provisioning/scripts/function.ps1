@@ -62,7 +62,7 @@ function Clear-Any-Restart([string] $key=$global:restartKey)
 	}
 }
 
-function Restart-And-Resume([string] $script, [string] $step) 
+function Restart-And-Resume([string] $script, [string] $deviceType ,[string] $step) 
 {
-	Restart-And-Run $global:restartKey "$global:powershell $script -Step $step"
+	Restart-And-Run $global:restartKey "$global:powershell $script -deviceType $deviceType  -Step $step"
 }

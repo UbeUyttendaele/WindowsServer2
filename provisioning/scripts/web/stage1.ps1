@@ -41,7 +41,7 @@ $DNSOption = @{
 
 
 try {
-    Write-Host "Configuring network settings." -ForegroundColor Green
+    Write-Host "Configuring network settings." -ForegroundColor yellow
     New-NetFirewallRule @firewallRule -ErrorAction Stop | out-null
     New-NetIPAddress @InterfaceConfig -ErrorAction Stop | out-null
     Set-DnsClientServerAddress @dnsConfig -ErrorAction Stop | out-null
@@ -52,7 +52,7 @@ catch {
 }
 
 try {
-    Write-Host "Configuring DHCP" -ForegroundColor Green
+    Write-Host "Configuring DHCP" -ForegroundColor yellow
     Install-WindowsFeature -Name 'DHCP' -IncludeManagementTools -ErrorAction Stop | out-null
     netsh dhcp add securitygroups | out-null
     Restart-Service -Name 'dhcpserver' | out-null
@@ -65,8 +65,8 @@ catch {
 }
 
 try {
-    Write-Host "Joining domain" -ForegroundColor Green
-    $credential = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList "admin", (ConvertTo-SecureString -AsPlainText "Admin2021" -Force)
+    Write-Host "Joining domain" -ForegroundColor yellow
+    $credential = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList "Administrator", (ConvertTo-SecureString -AsPlainText "Admin2021" -Force)
     Add-Computer -Domain "ws2-2223-ube.hogent" -Credential $credential -Force | out-null
 }
 catch {
