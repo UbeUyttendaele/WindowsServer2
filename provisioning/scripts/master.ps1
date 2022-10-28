@@ -19,13 +19,17 @@ switch ($deviceType) {
 	    Restart-And-Resume $script -deviceType $deviceType -step "2"
     }
     if (Should-Run-Step "2") {
-	    Write-Host "Executing stage 2"
+	    Write-Host "Executing stage 2" -ForegroundColor yellow
       invoke-expression "C:\scripts\dc\stage2.ps1"
-	    Wait-For-Keypress "Script complete, reboot is required, press any key to exit script and reboot the system..."
-      shutdown /r /t 0
+      Wait-For-Keypress "The script will continue after a reboot, press any key to reboot..." 
+      Restart-And-Resume $script -deviceType $deviceType -step "3"
+    }
+    if (Should-Run-Step "3") {
+	    Write-Host "Executing stage 3" -ForegroundColor yellow
+      invoke-expression "C:\scripts\dc\stage3.ps1"
+	    Wait-For-Keypress "Script complete, press any key to exit script"
     }
     }
-
 
   web {
     if (Should-Run-Step "1") {
@@ -37,14 +41,9 @@ switch ($deviceType) {
     }
     if (Should-Run-Step "2") {
 	    Write-Host "Executing stage 2" -ForegroundColor yellow
-
-        $credential = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList "Administrator", (ConvertTo-SecureString -AsPlainText "Admin2021" -Force)
-        $s = New-PSSession -credential $credential
-        Invoke-Command -Session $s -Scriptblock {invoke-expression "C:\scripts\web\stage2.ps1"}
-        Remove-PSSession $s 
-        
+      invoke-expression "C:\scripts\web\stage2.ps1"
 	    Wait-For-Keypress "Script complete, reboot is required, press any key to exit script and reboot the system..."
-        shutdown /r /t 0
+      shutdown /r /t 0
     }
       }
 

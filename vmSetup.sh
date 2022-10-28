@@ -71,7 +71,7 @@ for i in $*; do
     *)
         newVM $i "Windows10_64" 1 2048 128 "./vm/$i.vdi" 20480 $windowsClientIso $scriptsIso $exchangeIso
         unattendedInstall $i $windowsClientIso 1
-        mountScripts "ws" $scriptsIso
+        mountScripts $i $scriptsIso
         ;;
     esac
 
@@ -82,4 +82,4 @@ done
 #unattendedInstallTest "dctest" $windowsServerIso 1
 #mountScripts "dctest" $scriptsIso
 
-setupVM web #ws1 #dc 
+setupVM dc #web ws1 

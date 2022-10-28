@@ -1,4 +1,6 @@
-#Variables
+#-----------------------
+#   Variables
+#-----------------------
 $dhcpInterface = (Get-NetIpaddress -IpAddress 10.0.2.15).InterfaceAlias
 
 if ($dhcpInterface -like "Ethernet") {
@@ -20,32 +22,36 @@ $InterfaceConfig = @{
     PrefixLength = "24"
 }
 
-# Set ip address of the second interface to 192.168.22.1
+#-----------------------
+#   Configure network
+#-----------------------
 try {
     Write-Host "Configuring network settings." -ForegroundColor yellow
     New-NetIPAddress @InterfaceConfig -ErrorAction Stop | out-null
     Set-DnsClientServerAddress @dnsConfig -ErrorAction Stop | out-null
-    sleep 5
+    Set-NetFirewallProfile -Enabled False
 }
 catch {
-    Write-Warning -Message $("Task failed:"+ $_.Exception.Message)
-}
-# Copy scripts to c:\scripts
-try {
-    Write-Host "Copying scripts to C drive" -ForegroundColor yellow
-    Copy-Item -Path "Z:\scripts" -Destination "C:\scripts" -Recurse -ErrorAction Stop
-}
-catch {
-    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
+    Write-Host -Message $("Task failed:"+ $_.Exception.Message) -ForegroundColor red
 }
 
 
-#Install services
+#-----------------------
+#   Install AD
+#-----------------------
 try {
     Write-Host "Installing the services, this may take a while." -ForegroundColor yellow
-    Add-WindowsFeature AD-Domain-Services -IncludeManagementTools -ErrorAction Stop | out-null
-    Add-WindowsFeature RemoteAccess, Routing -ErrorAction Stop | out-null
+    Install-WindowsFeature AD-Domain-Services -IncludeManagementTools -ErrorAction Stop | out-null
+
+    Import-Module ADDSDeployment
+    Install-ADDSForest `
+    -DomainName "ws2-2223-ube.hogent" `
+    -DomainNetbiosName "WS2-2223-UBE" `
+    -SafeModeAdministratorPassword (ConvertTo-SecureString -AsPlainText "Admin2021" -Force) `
+    -InstallDns:$true `
+    -NoRebootOnCompletion:$true `
+    -Force:$true | out-null
 }
 catch {
-    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
+    Write-Host -Message $("Task failed:"+ $_.Exception.Message) -ForegroundColor red
 }

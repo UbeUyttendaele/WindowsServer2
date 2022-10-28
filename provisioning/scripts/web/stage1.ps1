@@ -52,19 +52,6 @@ catch {
 }
 
 try {
-    Write-Host "Configuring DHCP" -ForegroundColor yellow
-    Install-WindowsFeature -Name 'DHCP' -IncludeManagementTools -ErrorAction Stop | out-null
-    netsh dhcp add securitygroups | out-null
-    Restart-Service -Name 'dhcpserver' | out-null
-    Add-DhcpServerV4Scope @Scope -ErrorAction Stop | out-null
-    Set-DhcpServerV4OptionValue @GatewayOption -ErrorAction Stop | out-null
-    Set-DhcpServerV4OptionValue @DNSOption -ErrorAction Stop | out-null
-}
-catch {
-    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
-}
-
-try {
     Write-Host "Joining domain" -ForegroundColor yellow
     $credential = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList "Administrator", (ConvertTo-SecureString -AsPlainText "Admin2021" -Force)
     Add-Computer -Domain "ws2-2223-ube.hogent" -Credential $credential -Force | out-null
