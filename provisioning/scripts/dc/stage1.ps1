@@ -1,6 +1,7 @@
 #-----------------------
 #   Variables
 #-----------------------
+$WarningPreference = 'SilentlyContinue'
 $dhcpInterface = (Get-NetIpaddress -IpAddress 10.0.2.15).InterfaceAlias
 
 if ($dhcpInterface -like "Ethernet") {
@@ -9,7 +10,6 @@ if ($dhcpInterface -like "Ethernet") {
 else {
     $interface = "Ethernet"
 }
-
 
 $dnsConfig = @{
     InterfaceAlias = $interface
@@ -22,36 +22,33 @@ $InterfaceConfig = @{
     PrefixLength = "24"
 }
 
+$features=@(
+    'AD-Domain-Services',
+    'RemoteAccess',
+    'Routing',
+    'Adcs-Cert-Authority'
+)
+
 #-----------------------
 #   Configure network
 #-----------------------
 try {
-    Write-Host "Configuring network settings." -ForegroundColor yellow
+    Write-Host "-----------------------------------" -ForegroundColor yellow
+    Write-Host "    Configuring network settings   " -ForegroundColor yellow
+    Write-Host "-----------------------------------" -ForegroundColor yellow
+    Write-Host "Creating NetIpAdress" -ForegroundColor yellow
     New-NetIPAddress @InterfaceConfig -ErrorAction Stop | out-null
+    Write-Host "Setting DNS options" -ForegroundColor yellow
     Set-DnsClientServerAddress @dnsConfig -ErrorAction Stop | out-null
+    Write-Host "Configuring firewall" -ForegroundColor yellow
     Set-NetFirewallProfile -Enabled False
+
+    Write-Host "-----------------------------------" -ForegroundColor yellow
+    Write-Host "        Installing features        " -ForegroundColor yellow
+    Write-Host "-----------------------------------" -ForegroundColor yellow
+    Write-Host "Installing, this may take a while..." -ForegroundColor yellow
+    Install-WindowsFeature $features -includeManagementTools -ErrorAction Stop | out-null
 }
 catch {
-    Write-Host -Message $("Task failed:"+ $_.Exception.Message) -ForegroundColor red
-}
-
-
-#-----------------------
-#   Install AD
-#-----------------------
-try {
-    Write-Host "Installing the services, this may take a while." -ForegroundColor yellow
-    Install-WindowsFeature AD-Domain-Services -IncludeManagementTools -ErrorAction Stop | out-null
-
-    Import-Module ADDSDeployment
-    Install-ADDSForest `
-    -DomainName "ws2-2223-ube.hogent" `
-    -DomainNetbiosName "WS2-2223-UBE" `
-    -SafeModeAdministratorPassword (ConvertTo-SecureString -AsPlainText "Admin2021" -Force) `
-    -InstallDns:$true `
-    -NoRebootOnCompletion:$true `
-    -Force:$true | out-null
-}
-catch {
-    Write-Host -Message $("Task failed:"+ $_.Exception.Message) -ForegroundColor red
+    Write-Host $("(┛◉Д◉) ┛彡┻━┻: "+ $_.Exception.Message) -ForegroundColor red
 }

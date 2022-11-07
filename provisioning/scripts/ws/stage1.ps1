@@ -12,5 +12,5 @@ try {
     Add-Computer -DomainName $domain -Credential $credential -LocalCredential $lcred -Restart | out-null
 }
 catch {
-    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
+    Write-Warning -Message $("(┛◉Д◉) ┛彡┻━┻: "+ $_.Exception.Message)
 }

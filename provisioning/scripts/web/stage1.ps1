@@ -20,42 +20,38 @@ $FirewallRule = @{
     IcmpType = 8
 }
 
-$Scope = @{
-    Name = 'DHCP'
-    StartRange = '192.168.22.101'
-    EndRange = '192.168.22.150'
-    subnetmask = '255.255.255.0'
-    State = 'Active'
-    LeaseDuration = '1.00:00:00'
-}
-$GatewayOption = @{
-    ScopeID = "192.168.22.0"
-    OptionID = 3
-    Value = "192.168.22.1"
-}
-$DNSOption = @{
-    ScopeID = "192.168.22.0"
-    DnsDomain = "ws2-2223-ube.hogent"
-    DnsServer = "192.168.22.1"#, "192.168.22.2"
-}
+$credential = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList "Administrator", (ConvertTo-SecureString -AsPlainText "Admin2021" -Force)
+
+$features=@(
+    'DHCP',
+    'Web-Server',
+    'DNS'
+)
 
 
 try {
-    Write-Host "Configuring network settings." -ForegroundColor yellow
+    Write-Host "-----------------------------------" -ForegroundColor yellow
+    Write-Host "    Configuring network settings   " -ForegroundColor yellow
+    Write-Host "-----------------------------------" -ForegroundColor yellow
+    Write-Host "Configuring firewall" -ForegroundColor yellow
     New-NetFirewallRule @firewallRule -ErrorAction Stop | out-null
+    Write-Host "Creating NetIpAdress" -ForegroundColor yellow
     New-NetIPAddress @InterfaceConfig -ErrorAction Stop | out-null
+    Write-Host "Setting DNS options" -ForegroundColor yellow
     Set-DnsClientServerAddress @dnsConfig -ErrorAction Stop | out-null
     sleep 5
-}
-catch {
-    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
-}
+    Write-Host "-----------------------------------" -ForegroundColor yellow
+    Write-Host "        Installing features        " -ForegroundColor yellow
+    Write-Host "-----------------------------------" -ForegroundColor yellow
+    Write-Host "Installing, this may take a while..." -ForegroundColor yellow
+    Install-WindowsFeature $features -includeManagementTools -ErrorAction Stop | out-null
 
-try {
+    Write-Host "-------------------------" -ForegroundColor yellow
+    Write-Host "     Configuring domain    " -ForegroundColor yellow
+    Write-Host "-------------------------" -ForegroundColor yellow
     Write-Host "Joining domain" -ForegroundColor yellow
-    $credential = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList "Administrator", (ConvertTo-SecureString -AsPlainText "Admin2021" -Force)
     Add-Computer -Domain "ws2-2223-ube.hogent" -Credential $credential -Force | out-null
 }
 catch {
-    Write-Warning -Message $("Task failed: "+ $_.Exception.Message)
+    Write-Warning $("(┛◉Д◉) ┛彡┻━┻: "+ $_.Exception.Message)
 }
