@@ -14,9 +14,9 @@
 		- [NAT](#nat)
 		- [Certificate authority](#certificate-authority)
 	- [Web](#netwerk-diagram)
-		- [DHCP](#nat)
-		- [DNS](#)
-		- [IIS](#)
+		- [DHCP](#dhcp)
+		- [IIS](#iis)
+		- [DNS](#dns(web))
 	- [SQL](#sql)
 	- [Mail](#mail)
 	- [Workstations](#workstations)
@@ -32,6 +32,17 @@
 * Powershell scripts die voorzien zijn
 
 ----
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Documentatie
 ### Resource toekenning
@@ -56,6 +67,23 @@ Storage wordt dynamisch gealloceerd, dus de vm neemt evenveel opslagruimte in be
 
 -------
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ### Netwerk diagram
 
 __Het netwerk diagram kan nog logelijks veranderen indien de rollen verplaatst worden naar een andere server__
@@ -73,6 +101,17 @@ __Netwerkdiagram moet nog aangepast worden(sql server is nog niet toegevoegd)__
 |   ws 	    	|   dhcp	| 192.168.22.101-150	| 192.168.22.1	| 192.168.22.1, 192.168.22.2|
 
 --------
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -137,25 +176,10 @@ De service zal een website draaien die we zelf bepalen (komt later aan bod). Dez
 De website zal beschikbaar zijn op https://ws2-2223-ube.hogent.
 
 
-#### DNS
+#### DNS(web)
 Dit is onze secundairy DNS server dat we installeren met de rol `dns`. Deze zal alle records overnemen die zich bevinden op de dc.
 
 --------
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 ### Mail
 Deze server met de naam "mail" zal microsoft exchange draaien, hierdoor zullen de domein gebruikers emails naar elkaar kunnen sturen aan de hand van hun email adressen die worden toegekend via het domein. 
