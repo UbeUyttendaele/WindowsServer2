@@ -27,8 +27,18 @@ $sofieUser = @{
     ChangePasswordAtLogon = $false
     UserPrincipalName = "sofie@$env:USERDOMAIN.hogent"
 }
+$features=@(
+    'Adcs-Cert-Authority'
+)
 
  try {
+
+    Write-Host "-----------------------------------" -ForegroundColor yellow
+    Write-Host "        Installing features        " -ForegroundColor yellow
+    Write-Host "-----------------------------------" -ForegroundColor yellow
+    Write-Host "Installing, this may take a while..." -ForegroundColor yellow
+    Install-WindowsFeature $features -includeManagementTools -ErrorAction Stop | out-null
+
     Write-Host "-------------------------" -ForegroundColor yellow
     Write-Host "   Configuring Domain    " -ForegroundColor yellow
     Write-Host "-------------------------" -ForegroundColor yellow
@@ -59,5 +69,5 @@ $sofieUser = @{
     Install-AdcsCertificationAuthority -CACommonName dc -CAType EnterpriseRootCa -HashAlgorithmName SHA256 -KeyLength 2048 
  }
  catch {
-    Write-Host $("(┛◉Д◉) ┛彡┻━┻: "+ $_.Exception.Message) -ForegroundColor red
+    Write-Host $("(Task failed: "+ $_.Exception.Message) -ForegroundColor red
  }

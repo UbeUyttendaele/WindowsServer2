@@ -1,3 +1,4 @@
+$WarningPreference = 'SilentlyContinue'
 $Scope = @{
     Name = 'DHCP'
     StartRange = '192.168.22.101'
@@ -21,11 +22,8 @@ try {
     Write-Host "-------------------------" -ForegroundColor yellow
     Write-Host "     Configuring DHCP    " -ForegroundColor yellow
     Write-Host "-------------------------" -ForegroundColor yellow
-    # Installing DHCP service
-    # Authorizing DHCP Server
     Write-Host "Authorizing DHCP Server" -ForegroundColor yellow
     Add-DhcpServerInDC -DnsName "web.ws2-2223-ube.hogent" -IPAddress 192.168.22.1
-    # Creating a DHCP Scope
     Write-Host "Creating a DHCP Scope" -ForegroundColor yellow
     Add-DhcpServerV4Scope @Scope -ErrorAction Stop | out-null
     Set-DhcpServerV4OptionValue @GatewayOption -ErrorAction Stop | out-null
@@ -52,7 +50,7 @@ try {
     New-WebSite -Name "webpage" -Port 80 -HostHeader "www.ws2-2223-ube.hogent" -PhysicalPath "C:\inetpub\wwwroot\webpage" -applicationpool 'webpage' -IPAddress 192.168.22.2 -ErrorAction Stop | out-null
 }
 catch {
-    Write-Warning -Message $("(┛◉Д◉) ┛彡┻━┻: "+ $_.Exception.Message)
+    Write-Warning -Message $("(Task failed: "+ $_.Exception.Message)
 }
 
 

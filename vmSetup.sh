@@ -4,11 +4,10 @@ echo "Making script ISO"
 ./makeIso.sh &> /dev/null
 
 
-windowsServerIso="./iso/en_windows_server_2019_x64_dvd_4cb967d8.iso"
-exchangeIso="./iso/mul_exchange_server_2019_cumulative_update_12_x64_dvd_52bf3153.iso"
-sqlIso="./iso/win10Client.iso"
-windowsClientIso="./iso/win10Client.iso"
-guestAdditionsIso="./iso/VBoxGuestAdditions_6.1.38.iso"
+windowsServerIso="./iso/server.iso"
+exchangeIso="./iso/exchange.iso"
+windowsClientIso="./iso/client.iso"
+sqlIso="./iso/sql.iso"
 scriptsIso="./iso/scripts.iso"
 
 
@@ -36,7 +35,7 @@ VBoxManage unattended install $1 --iso=$2 --hostname=$1.ws2-2223-ube.hogent --us
 }
 function mountScripts() {
 VBoxManage storageattach $1 --storagectl "IDE controller" --device 0 --port 2 --type dvddrive --medium $2
-if [ $1 = "mail" ] || [ $1 = "web" ]; then
+if [ $1 = "mail" ] || [ $1 = "sql" ]; then
     VBoxManage storageattach $1 --storagectl "IDE controller" --device 0 --port 3 --type dvddrive --medium $3
 fi
 }
@@ -48,35 +47,48 @@ for i in $*; do
 
     dc)
         echo "---------------------------"
-        echo "Creating ${1}"
-        newVM "dc" "Windows2019_64" 2 2048 39 "./vm/dc.vdi" 20480 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
-        echo "Starting unattended install: ${1}"
+        echo "Creating ${i}"
+        newVM "dc" "Windows2019_64" 2 2048 39 "./vm/dc.vdi" 25000 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
+        echo "Starting unattended install: ${i}"
         unattendedInstall "dc" $windowsServerIso 1 &> /dev/null
         echo "Mounting scripts"
         mountScripts "dc" $scriptsIso &> /dev/null
         ;;
 
     web)
-        echo "Creating ${1}"
-        newVM "web" "Windows2019_64" 2 2048 39 "./vm/web.vdi" 20480 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
-        echo "Starting unattended install: ${1}"
+        echo "---------------------------"
+        echo "Creating ${i}"
+        newVM "web" "Windows2019_64" 2 1024 39 "./vm/web.vdi" 25000 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
+        echo "Starting unattended install: ${i}"
         unattendedInstall "web" $windowsServerIso 1 &> /dev/null
-        mountScripts "web" $scriptsIso $sqlIso &> /dev/null
+        echo "Mounting scripts"
+        mountScripts "web" $scriptsIso &> /dev/null
+        ;;
+    sql)
+        echo "---------------------------"
+        echo "Creating ${i}"
+        newVM "sql" "Windows2019_64" 1 1024 39 "./vm/sql.vdi" 25000 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
+        echo "Starting unattended install: ${i}"
+        unattendedInstall "sql" $windowsServerIso 1 &> /dev/null
+        echo "Mounting scripts"
+        mountScripts "sql" $scriptsIso $sqlIso &> /dev/null
         ;;
 
     mail)
-        echo "Creating ${1}"
-        newVM "mail" "Windows2019_64" 2 6144 39 "./vm/mail.vdi" 20480 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
-        echo "Starting unattended install: ${1}"
+        echo "---------------------------"
+        echo "Creating ${i}"
+        newVM "mail" "Windows2019_64" 2 6144 39 "./vm/mail.vdi" 50000 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
+        echo "Starting unattended install: ${i}"
         unattendedInstall "mail" $windowsServerIso 1 &> /dev/null
         echo "Mounting scripts"
         mountScripts "mail" $scriptsIso $exchangeIso &> /dev/null
         ;;
 
     *)
-        echo "Creating ${1}"
-        newVM $i "Windows10_64" 1 2048 128 "./vm/$i.vdi" 20480 $windowsClientIso $scriptsIso $exchangeIso &> /dev/null
-        echo "Starting unattended install: ${1}"
+        echo "---------------------------"
+        echo "Creating ${i}"
+        newVM $i "Windows10_64" 1 2048 128 "./vm/$i.vdi" 25000 $windowsClientIso $scriptsIso $exchangeIso &> /dev/null
+        echo "Starting unattended install: ${i}"
         unattendedInstall $i $windowsClientIso 1 &> /dev/null
         echo "Mounting scripts"
         mountScripts $i $scriptsIso &> /dev/null
@@ -90,4 +102,4 @@ done
 #unattendedInstallTest "dctest" $windowsServerIso 1
 #mountScripts "dctest" $scriptsIso
 
-setupVM dc #web #ws1 
+setupVM  sql #dc #web sql  #ws1 

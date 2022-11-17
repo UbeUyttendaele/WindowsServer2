@@ -1,3 +1,4 @@
+$WarningPreference = 'SilentlyContinue'
 $dnsConfig = @{
     InterfaceAlias = "Ethernet"
     ServerAddresses = @("192.168.22.1", "192.168.22.2")
@@ -53,5 +54,5 @@ try {
     Add-Computer -Domain "ws2-2223-ube.hogent" -Credential $credential -Force | out-null
 }
 catch {
-    Write-Warning $("(┛◉Д◉) ┛彡┻━┻: "+ $_.Exception.Message)
+    Write-Warning $("(Task failed: "+ $_.Exception.Message)
 }

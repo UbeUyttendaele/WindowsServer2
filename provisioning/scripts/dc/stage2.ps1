@@ -12,17 +12,26 @@ try {
     Write-Host "-------------------------" -ForegroundColor yellow
     Write-Host "Importing module" -ForegroundColor yellow
     Import-Module ADDSDeployment
+
     Write-Host "Installing ADDSForest" -ForegroundColor yellow
+    
     Install-ADDSForest `
+    -CreateDnsDelegation:$false `
+    -DatabasePath "C:\Windows\NTDS" `
+    -DomainMode "WinThreshold" `
     -DomainName "ws2-2223-ube.hogent" `
     -DomainNetbiosName "WS2-2223-UBE" `
     -SafeModeAdministratorPassword (ConvertTo-SecureString -AsPlainText "Admin2021" -Force) `
+    -ForestMode "WinThreshold" `
     -InstallDns:$true `
+    -LogPath "C:\Windows\NTDS" `
     -NoRebootOnCompletion:$true `
-    -Force:$true | out-null
+    -SysvolPath "C:\Windows\SYSVOL" `
+    -Force:$true
+
 }
 catch {
-    Write-Host $("(┛◉Д◉) ┛彡┻━┻: "+ $_.Exception.Message) -ForegroundColor red
+    Write-Host $("Task failed: "+ $_.Exception.Message) -ForegroundColor red
 }
 
     
