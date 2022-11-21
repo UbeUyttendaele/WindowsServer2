@@ -31,7 +31,7 @@ VBoxManage storageattach $1 --storagectl "IDE controller" --device 0 --port 3 --
 }
 
 function unattendedInstall() {
-VBoxManage unattended install $1 --iso=$2 --hostname=$1.ws2-2223-ube.hogent --user=ladmin --password=Admin2021 --full-user-name=lAdmin --country=BE --image-index=$3 --start-vm=gui --post-install-command="powershell copy-Item -Path E: -Destination C:\scripts -Recurse && powershell C:\scripts\master.ps1 -deviceType ${1}"
+VBoxManage unattended install $1 --iso=$2 --hostname=$1.ws2-2223-ube.hogent --user=ladmin --password=Admin2021 --full-user-name=lAdmin --country=BE --image-index=$3 --start-vm=gui --post-install-command="powershell Set-ExecutionPolicy unrestricted localmachine && powershell copy-Item -Path E: -Destination C:\scripts -Recurse && start powershell C:\scripts\master.ps1 -deviceType ${4}"
 }
 function mountScripts() {
 VBoxManage storageattach $1 --storagectl "IDE controller" --device 0 --port 2 --type dvddrive --medium $2
@@ -47,10 +47,11 @@ for i in $*; do
 
     dc)
         echo "---------------------------"
+        command=
         echo "Creating ${i}"
         newVM "dc" "Windows2019_64" 2 2048 39 "./vm/dc.vdi" 25000 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
         echo "Starting unattended install: ${i}"
-        unattendedInstall "dc" $windowsServerIso 1 &> /dev/null
+        unattendedInstall "dc" $windowsServerIso 1 "dc" &> /dev/null
         echo "Mounting scripts"
         mountScripts "dc" $scriptsIso &> /dev/null
         ;;
@@ -58,9 +59,9 @@ for i in $*; do
     web)
         echo "---------------------------"
         echo "Creating ${i}"
-        newVM "web" "Windows2019_64" 2 1024 39 "./vm/web.vdi" 25000 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
+        newVM "web" "Windows2019_64" 2 1024 39 "./vm/web.vdi" 20000 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
         echo "Starting unattended install: ${i}"
-        unattendedInstall "web" $windowsServerIso 1 &> /dev/null
+        unattendedInstall "web" $windowsServerIso 1 "web" &> /dev/null
         echo "Mounting scripts"
         mountScripts "web" $scriptsIso &> /dev/null
         ;;
@@ -69,7 +70,7 @@ for i in $*; do
         echo "Creating ${i}"
         newVM "sql" "Windows2019_64" 1 1024 39 "./vm/sql.vdi" 25000 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
         echo "Starting unattended install: ${i}"
-        unattendedInstall "sql" $windowsServerIso 1 &> /dev/null
+        unattendedInstall "sql" $windowsServerIso 1 "sql" &> /dev/null
         echo "Mounting scripts"
         mountScripts "sql" $scriptsIso $sqlIso &> /dev/null
         ;;
@@ -79,7 +80,7 @@ for i in $*; do
         echo "Creating ${i}"
         newVM "mail" "Windows2019_64" 2 6144 39 "./vm/mail.vdi" 50000 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
         echo "Starting unattended install: ${i}"
-        unattendedInstall "mail" $windowsServerIso 1 &> /dev/null
+        unattendedInstall "mail" $windowsServerIso 1 "mail" &> /dev/null
         echo "Mounting scripts"
         mountScripts "mail" $scriptsIso $exchangeIso &> /dev/null
         ;;
@@ -87,9 +88,9 @@ for i in $*; do
     *)
         echo "---------------------------"
         echo "Creating ${i}"
-        newVM $i "Windows10_64" 1 2048 128 "./vm/$i.vdi" 25000 $windowsClientIso $scriptsIso $exchangeIso &> /dev/null
+        newVM $i "Windows10_64" 1 2048 128 "./vm/$i.vdi" 30000 $windowsClientIso $scriptsIso $exchangeIso &> /dev/null
         echo "Starting unattended install: ${i}"
-        unattendedInstall $i $windowsClientIso 1 &> /dev/null
+        unattendedInstall $i $windowsClientIso 1 "ws" &> /dev/null
         echo "Mounting scripts"
         mountScripts $i $scriptsIso &> /dev/null
         ;;
@@ -102,4 +103,4 @@ done
 #unattendedInstallTest "dctest" $windowsServerIso 1
 #mountScripts "dctest" $scriptsIso
 
-setupVM  sql #dc #web sql  #ws1 
+setupVM ws1

@@ -87,9 +87,12 @@ switch ($deviceType) {
   ws {
     if (Should-Run-Step "1") {
 	    Write-Host "Executing stage 1 / user:$env:UserName" -ForegroundColor yellow
-	    Wait-For-Keypress "Before continuing the script wait until DC is done configuring the domain, press any key to continue..." 
-        invoke-expression "C:\scripts\ws\stage1.ps1"
-        Wait-For-Keypress "The script will continue after a reboot, before continuing wait until DC is done configuring the domain, press any key to reboot..." 
+	    Wait-For-Keypress "Before continuing the script wait until DC and web are done configuring the domain and dhcp server, press any key to continue..." 
+      invoke-expression "C:\scripts\ws\stage1.ps1"
+      Set-ItemProperty $RegPath "AutoAdminLogon" -Value "1" -type String 
+      Set-ItemProperty $RegPath "DefaultUsername" -Value "WS2-2223-UBE\Administrator" -type String 
+      Set-ItemProperty $RegPath "DefaultPassword" -Value "Admin2021" -type String
+      Wait-For-Keypress "The script will continue after a reboot, before continuing wait until DC is done configuring the domain, press any key to reboot..." 
 	    shutdown /r /t 0
     }
       }

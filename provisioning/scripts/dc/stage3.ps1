@@ -63,6 +63,31 @@ $features=@(
     Set-DnsServerPrimaryZone -ComputerName dc -ZoneName ws2-2223-ube.hogent -SecureSecondaries TransferToZoneNameServer -Notify Notify
     Add-DnsServerResourceRecordA -Name www -ZoneName ws2-2223-ube.hogent -AllowUpdateAny -IPv4Address 192.168.22.2
 
+    # Aanmaken Reverse Lookup Zone
+    Add-DnsServerPrimaryZone -networkID "192.168.22.0/24" -ReplicationScope "Domain" -DynamicUpdate "Secure"
+    
+    # Toevoegen Forwarder
+    Add-DnsServerForwarder -IPAddress 8.8.8.8
+    
+    # Omzetten A records naar PTR records.
+    $computerName = 'WS-dc'; 
+    
+    # Get all the DNS A Records.
+    $records = Get-DnsServerResourceRecord -ZoneName 'WS2-2223-jorn.hogent' -RRType A -ComputerName $computerName; 
+    foreach ($record in $records) 
+    { 
+        # The reverse lookup domain name.  This is the PTR Response.
+        $ptrDomain = $record.HostName + '.WS2-2223-jorn.hogent'; 
+    
+        # Reverse the IP Address for the name record.
+        $name = ($record.RecordData.IPv4Address.ToString() -replace '^(\d+)\.(\d+)\.(\d+).(\d+)$','$4.$3.$2');
+        
+        # Add the new PTR record.
+        Add-DnsServerResourceRecordPtr -Name $name -ZoneName '22.168.192.in-addr.arpa' -ComputerName $computerName -PtrDomainName $ptrDomain; 
+    }
+    
+    
+
     Write-Host "-------------------------" -ForegroundColor yellow
     Write-Host "     Configuring DNS     " -ForegroundColor yellow
     Write-Host "-------------------------" -ForegroundColor yellow
