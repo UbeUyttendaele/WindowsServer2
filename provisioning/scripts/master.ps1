@@ -31,6 +31,8 @@ switch ($deviceType) {
     if (Should-Run-Step "3") {
 	    Write-Host "Executing stage 3 / user:$env:UserName" -ForegroundColor yellow
       invoke-expression "C:\scripts\dc\stage3.ps1"
+	    Wait-For-Keypress "Before continuing the script wait until Web is done setting up the DNS server, press any key to continue..."
+      invoke-expression "C:\scripts\dc\stage4.ps1"
 	    Wait-For-Keypress "Script complete"
     }
     }
@@ -49,6 +51,8 @@ switch ($deviceType) {
     if (Should-Run-Step "2") {
 	    Write-Host "Executing stage 2 / user:$env:UserName" -ForegroundColor yellow
       invoke-expression "C:\scripts\web\stage2.ps1"
+      Wait-For-Keypress "Before continuing the script wait until DC is done configuring the DNS, press any key to continue..." 
+      invoke-expression "C:\scripts\web\stage3.ps1"
 	    Wait-For-Keypress "Script complete"
     }
       }

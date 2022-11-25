@@ -103,4 +103,4 @@ done
 #unattendedInstallTest "dctest" $windowsServerIso 1
 #mountScripts "dctest" $scriptsIso
 
-setupVM ws1
+setupVM web

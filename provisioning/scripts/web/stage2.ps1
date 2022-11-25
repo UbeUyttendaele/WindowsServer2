@@ -1,4 +1,4 @@
-$WarningPreference = 'SilentlyContinue'
+#$WarningPreference = 'SilentlyContinue'
 $Scope = @{
     Name = 'DHCP'
     StartRange = '192.168.22.101'
@@ -15,10 +15,17 @@ $GatewayOption = @{
 $DNSOption = @{
     ScopeID = "192.168.22.0"
     DnsDomain = "ws2-2223-ube.hogent"
-    DnsServer = "192.168.22.1"#, "192.168.22.2"
+    DnsServer = "192.168.22.1", "192.168.22.2"
 }
-
 try {
+
+    Write-Host "-------------------------" -ForegroundColor yellow
+    Write-Host "     Configuring DNS     " -ForegroundColor yellow
+    Write-Host "-------------------------" -ForegroundColor yellow
+    write-host "Setting up DNS server" -ForegroundColor yellow
+    Add-DnsServerSecondaryZone -MasterServers 192.168.22.1 -Name "ws2-2223-ube.hogent" -ZoneFile ws2-2223-ube.hogent -ErrorAction Stop | out-null
+
+
     Write-Host "-------------------------" -ForegroundColor yellow
     Write-Host "     Configuring DHCP    " -ForegroundColor yellow
     Write-Host "-------------------------" -ForegroundColor yellow
@@ -28,29 +35,8 @@ try {
     Add-DhcpServerV4Scope @Scope -ErrorAction Stop | out-null
     Set-DhcpServerV4OptionValue @GatewayOption -ErrorAction Stop | out-null
     Set-DhcpServerV4OptionValue @DNSOption -ErrorAction Stop | out-null
-
-    Write-Host "-------------------------" -ForegroundColor yellow
-    Write-Host "     Configuring DNS     " -ForegroundColor yellow
-    Write-Host "-------------------------" -ForegroundColor yellow
-    Write-Host "TODO" -ForegroundColor red
-    Add-DnsServerSecondaryZone -MasterServers 192.168.22.1 -Name "ws2-2223-ube.hogent" -ZoneFile ws2-2223-ube.hogent -ErrorAction Stop | out-null
-
-    Write-Host "-------------------------" -ForegroundColor yellow
-    Write-Host "  Configuring webserver  " -ForegroundColor yellow
-    Write-Host "-------------------------" -ForegroundColor yellow
-    Write-Host "Removing default website" -ForegroundColor yellow
-    Remove-Website -Name Default* -ErrorAction Stop | out-null
-    Remove-WebAppPool -Name Default* -ErrorAction Stop | out-null
-    Remove-Item 'C:\inetpub\wwwroot\iis*' -ErrorAction Stop | out-null
-    Write-Host "Copying webpage to destination" -ForegroundColor yellow
-    Copy-Item 'C:\scripts\web\webpage' -Destination 'C:\inetpub\wwwroot\webpage' -Recurse -ErrorAction Stop | out-null
-    Write-Host "Creating WebAppPool" -ForegroundColor yellow
-    New-WebAppPool -Name webpage -ErrorAction Stop | out-null
-    Write-Host "Creating Website" -ForegroundColor yellow
-    New-WebSite -Name "webpage" -Port 80 -HostHeader "www.ws2-2223-ube.hogent" -PhysicalPath "C:\inetpub\wwwroot\webpage" -applicationpool 'webpage' -IPAddress 192.168.22.2 -ErrorAction Stop | out-null
 }
 catch {
     Write-Warning -Message $("(Task failed: "+ $_.Exception.Message)
 }
-
 
