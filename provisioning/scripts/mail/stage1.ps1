@@ -2,34 +2,21 @@
 #   Variables
 #-----------------------
 $WarningPreference = 'SilentlyContinue'
-$dhcpInterface = (Get-NetIpaddress -IpAddress 10.0.2.15).InterfaceAlias
-
-if ($dhcpInterface -like "Ethernet") {
-    $interface = "Ethernet 2"
-}
-else {
-    $interface = "Ethernet"
-}
-
 $dnsConfig = @{
-    InterfaceAlias = $interface
+    InterfaceAlias = "Ethernet"
     ServerAddresses = @("192.168.22.1", "192.168.22.2")
 }
 
 $InterfaceConfig = @{
-    InterfaceAlias = $interface
-    IPAddress = "192.168.22.1"
+    InterfaceAlias = "Ethernet"
+    IPAddress = "192.168.22.3"
     PrefixLength = "24"
+    DefaultGateway = "192.168.22.1"
 }
-
-$features=@(
-    'AD-Domain-Services',
-    'RSAT-ADDS',
-    'RemoteAccess',
-    'Routing'
-)
+$credential = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList "Administrator", (ConvertTo-SecureString -AsPlainText "Admin2021" -Force)
 
 try {
+    
     Write-Host "-----------------------------------" -ForegroundColor yellow
     Write-Host "    Configuring network settings   " -ForegroundColor yellow
     Write-Host "-----------------------------------" -ForegroundColor yellow
@@ -38,13 +25,13 @@ try {
     Write-Host "Setting DNS options" -ForegroundColor yellow
     Set-DnsClientServerAddress @dnsConfig -ErrorAction Stop | out-null
     Write-Host "Configuring firewall" -ForegroundColor yellow
-    Set-NetFirewallProfile -Enabled False
-
+    sleep 5
+    
     Write-Host "-----------------------------------" -ForegroundColor yellow
-    Write-Host "        Installing features        " -ForegroundColor yellow
+    Write-Host "        Configuring domain         " -ForegroundColor yellow
     Write-Host "-----------------------------------" -ForegroundColor yellow
-    Write-Host "Installing, this may take a while..." -ForegroundColor yellow
-    Install-WindowsFeature $features -includeManagementTools -ErrorAction Stop | out-null
+    Write-Host "Joining domain" -ForegroundColor yellow
+    Add-Computer -Domain "ws2-2223-ube.hogent" -Credential $credential -Force | out-null
 }
 catch {
     Write-Host $("(Task failed: "+ $_.Exception.Message) -ForegroundColor red

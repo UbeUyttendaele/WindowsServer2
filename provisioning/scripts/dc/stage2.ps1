@@ -7,9 +7,9 @@ $WarningPreference = 'SilentlyContinue'
 #-----------------------
 
 try {
-    Write-Host "-------------------------" -ForegroundColor yellow
-    Write-Host "    Initializing domain  " -ForegroundColor yellow
-    Write-Host "-------------------------" -ForegroundColor yellow
+    Write-Host "-----------------------------------" -ForegroundColor yellow
+    Write-Host "        Initializing domain  " -ForegroundColor yellow
+    Write-Host "-----------------------------------" -ForegroundColor yellow
     Write-Host "Importing module" -ForegroundColor yellow
     Import-Module ADDSDeployment
 
@@ -28,6 +28,10 @@ try {
     -NoRebootOnCompletion:$true `
     -SysvolPath "C:\Windows\SYSVOL" `
     -Force:$true
+    Write-Host " " -ForegroundColor yellow
+    Write-Host " " -ForegroundColor yellow
+    Write-Host " " -ForegroundColor yellow
+    Write-Host " " -ForegroundColor yellow
 
 }
 catch {

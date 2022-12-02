@@ -10,10 +10,10 @@ try {
     Write-Host "             SQL setup            " -ForegroundColor yellow
     Write-Host "-----------------------------------" -ForegroundColor yellow
     Write-Host "Configuring remote access" -ForegroundColor yellow
-    sqlcmd -i $configfile -ErrorAction Stop | out-null
+    sqlcmd -i $configfile
     Write-Host "Starting sqlbrowser" -ForegroundColor yellow
-    Set-service sqlbrowser -StartupType Autoc -ErrorAction Stop | out-null
-    Start-service sqlbrowser -ErrorAction Stop | out-null
+    Set-service sqlbrowser -StartupType Auto
+    Start-service sqlbrowser
 
     import-module SQLPS 
     $smo = 'Microsoft.SqlServer.Management.Smo.'  
@@ -26,7 +26,7 @@ try {
 
     Write-Host "Creating database" -ForegroundColor yellow
     mkdir "C:\database"
-    sqlcmd -Q $query -ErrorAction Stop | out-null
+    sqlcmd -Q $query
 }
 catch {
     Write-Host $("(Task failed: "+ $_.Exception.Message) -ForegroundColor red

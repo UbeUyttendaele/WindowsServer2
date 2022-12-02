@@ -11,7 +11,7 @@ $InterfaceConfig = @{
     DefaultGateway = "192.168.22.1"
 }
 
-$FirewallRule = @{
+$ICMP = @{
     Name = "Allow RDP"
     DisplayName = "Allow RDP"
     Description = "Allow inbound ICMPv4"
@@ -20,6 +20,7 @@ $FirewallRule = @{
     Protocol = "ICMPv4"
     IcmpType = 8
 }
+
 
 $credential = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList "Administrator", (ConvertTo-SecureString -AsPlainText "Admin2021" -Force)
 
@@ -35,7 +36,7 @@ try {
     Write-Host "    Configuring network settings   " -ForegroundColor yellow
     Write-Host "-----------------------------------" -ForegroundColor yellow
     Write-Host "Configuring firewall" -ForegroundColor yellow
-    New-NetFirewallRule @firewallRule -ErrorAction Stop | out-null
+    New-NetFirewallRule @ICMP -ErrorAction Stop | out-null
     Write-Host "Creating NetIpAdress" -ForegroundColor yellow
     New-NetIPAddress @InterfaceConfig -ErrorAction Stop | out-null
     Write-Host "Setting DNS options" -ForegroundColor yellow
