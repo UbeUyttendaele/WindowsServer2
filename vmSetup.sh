@@ -77,6 +77,7 @@ for i in $*; do
 
     mail)
         echo "---------------------------"
+        # 8192
         echo "Creating ${i}"
         newVM "mail" "Windows2019_64" 2 6144 39 "./vm/mail.vdi" 50000 $windowsServerIso $scriptsIso $exchangeIso &> /dev/null
         echo "Starting unattended install: ${i}"

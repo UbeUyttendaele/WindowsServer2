@@ -88,6 +88,18 @@ switch ($deviceType) {
       Set-ItemProperty $RegPath "AutoAdminLogon" -Value "1" -type String 
       Set-ItemProperty $RegPath "DefaultUsername" -Value "WS2-2223-UBE\Administrator" -type String 
       Set-ItemProperty $RegPath "DefaultPassword" -Value "Admin2021" -type String
+      Wait-For-Keypress "The script will continue after a reboot, press any key to reboot..." 
+      Restart-And-Resume $script -deviceType $deviceType -step "2"
+    }
+    if (Should-Run-Step "2") {
+	    Write-Host "Executing stage 2 / user:$env:UserName" -ForegroundColor yellow
+      invoke-expression "C:\scripts\mail\stage2.ps1"
+      Wait-For-Keypress "Script complete, press any key to reboot..." 
+      Restart-And-Resume $script -deviceType $deviceType -step "3"
+    }
+    if (Should-Run-Step "3") {
+	    Write-Host "Executing stage 3 / user:$env:UserName" -ForegroundColor yellow
+      invoke-expression "C:\scripts\mail\stage3.ps1"
       Wait-For-Keypress "Script complete, press any key to reboot..." 
     }
     }
