@@ -64,7 +64,7 @@ for($i=0; $i -lt $args.Count; $i++){
         $dc {
             echo "---------------------------"
             echo "Creating ${dc}"
-            newVM "dc" "Windows2019_64" 2 2048 39 "./vm/dc.vdi" 20480 $windowsServerIso $scriptsIso $exchangeIso
+            newVM $args[$i] "Windows2019_64" 2 2048 39 "./vm/dc.vdi" 25000 $windowsServerIso $scriptsIso $exchangeIso
             echo "Starting unattended install"
             unattendedInstall "dc" $windowsServerIso 1 $args[$i]
             echo "Mounting scripts"
@@ -73,7 +73,7 @@ for($i=0; $i -lt $args.Count; $i++){
         $web {
             echo "---------------------------"
             echo "Creating ${web}"
-            newVM "web" "Windows2019_64" 2 2048 39 "./vm/web.vdi" 20480 $windowsServerIso $scriptsIso $exchangeIso
+            newVM $args[$i] "Windows2019_64" 2 2048 39 "./vm/web.vdi" 20000 $windowsServerIso $scriptsIso $exchangeIso
             echo "Starting unattended install"
             unattendedInstall "web" $windowsServerIso 1 $args[$i]
             echo "Mounting scripts"
@@ -82,7 +82,7 @@ for($i=0; $i -lt $args.Count; $i++){
         $mail {
             echo "---------------------------"
             echo "Creating ${mail}"
-            newVM "mail" "Windows2019_64" 2 6144 39 "./vm/mail.vdi" 20480 $windowsServerIso $scriptsIso $exchangeIso
+            newVM $args[$i] "Windows2019_64" 2 6144 39 "./vm/mail.vdi" 50000 $windowsServerIso $scriptsIso $exchangeIso
             echo "Starting unattended install"
             unattendedInstall "mail" $windowsServerIso 1 $args[$i]
             echo "Mounting scripts"
@@ -92,7 +92,7 @@ for($i=0; $i -lt $args.Count; $i++){
         $sql {
             echo "---------------------------"
             echo "Creating ${sql}"
-            newVM "sql" "Windows2019_64" 1 1024 39 "./vm/mail.vdi" 25000 $windowsServerIso $scriptsIso $exchangeIso
+            newVM $args[$i] "Windows2019_64" 1 1024 39 "./vm/mail.vdi" 25000 $windowsServerIso $scriptsIso $exchangeIso
             echo "Starting unattended install"
             unattendedInstall "sql" $windowsServerIso 1 $args[$i]
             echo "Mounting scripts"
@@ -101,7 +101,7 @@ for($i=0; $i -lt $args.Count; $i++){
         Default {
             echo "---------------------------"
             echo "Creating ${args[i]}"
-            newVM $args[$i] "Windows10_64" 1 2048 128 "./vm/${args[$i]}.vdi" 20480 $windowsClientIso $scriptsIso $exchangeIso
+            newVM $args[$i] "Windows10_64" 1 2048 128 "./vm/${args[$i]}.vdi" 30000 $windowsClientIso $scriptsIso $exchangeIso
             echo "Starting unattended install"
             unattendedInstall "ws" $windowsClientIso 1 $args[$i]
             echo "Mounting scripts"
@@ -115,4 +115,4 @@ for($i=0; $i -lt $args.Count; $i++){
 #unattendedInstallTest "dctest" $windowsServerIso 1
 #mountScripts "dctest" $scriptsIso
 
-setupVM $dc #$web $ws  
+setupVM $dc $web $ws  
