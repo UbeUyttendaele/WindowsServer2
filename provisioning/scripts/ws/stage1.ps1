@@ -21,7 +21,6 @@ try {
     Write-Host "Installing, this may take a while..." -ForegroundColor yellow
     start-process $setup.fullname -ArgumentList "/Passive /Install /Norestart SSMSInstallRoot=C:\SSMS" -wait -ErrorAction Stop
 
-
     Write-Host "-----------------------------------" -ForegroundColor yellow
     Write-Host "    Installing server manager      " -ForegroundColor yellow
     Write-Host "-----------------------------------" -ForegroundColor yellow

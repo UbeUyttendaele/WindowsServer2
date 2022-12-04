@@ -4,7 +4,7 @@
 $WarningPreference = 'SilentlyContinue'
 $dnsConfig = @{
     InterfaceAlias = "Ethernet"
-    ServerAddresses = @("192.168.22.1", "192.168.22.2")
+    ServerAddresses = @("192.168.22.1")
 }
 
 $InterfaceConfig = @{
