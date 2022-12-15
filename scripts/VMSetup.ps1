@@ -1,7 +1,7 @@
 set PATH=%PATH%;"C:\Program Files\Oracle\VirtualBox"
 $env:PATH = $env:PATH + ";C:\Program Files\Oracle\VirtualBox"
 . .\function.ps1
-$source_dir = ".\provisioning\scripts\"
+$source_dir = ".\provisioning\"
 echo "Making script ISO"
 get-childitem $source_dir | New-IsoFile -path .\iso\scripts.iso -Force
 # Create a new VM

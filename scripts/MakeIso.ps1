@@ -1,3 +1,3 @@
 . .\function.ps1
-$source_dir = ".\provisioning\scripts\"
+$source_dir = ".\provisioning\"
 get-childitem $source_dir | New-IsoFile -path .\iso\scripts.iso -Force
