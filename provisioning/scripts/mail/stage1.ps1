@@ -76,7 +76,7 @@ try {
     
     write-host "Installing Visual c++ 2012" -ForegroundColor yellow
     curl https://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe -o 2012setup.exe
-    Start-Process "2012setup.exe" -argumentlist "//install /quiet /norestart" -wait
+    Start-Process "2012setup.exe" -argumentlist "/install /quiet /norestart" -wait
 
     write-host "Installing rewrite module" -ForegroundColor yellow
     curl https://download.microsoft.com/download/1/2/8/128E2E22-C1B9-44A4-BE2A-5859ED1D4592/rewrite_amd64_en-US.msi -o rewrite_amd64_en-US.msi
