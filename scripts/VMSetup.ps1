@@ -90,7 +90,7 @@ for($i=0; $i -lt $args.Count; $i++){
             echo "---------------------------"
             $device = $args[$i]
             echo "Creating $device"
-            newVM $args[$i] "Windows10_64" 1 2048 128 "./vm/${args[$i]}.vdi" 30000 $windowsClientIso $scriptsIso $exchangeIso | out-null
+            newVM $args[$i] "Windows10_64" 1 2048 128 "./vm/${device}.vdi" 30000 $windowsClientIso $scriptsIso $exchangeIso | out-null
             echo "Starting unattended install"
             unattendedInstall "ws" $windowsClientIso 1 $args[$i]
             echo "Mounting scripts"
@@ -100,8 +100,4 @@ for($i=0; $i -lt $args.Count; $i++){
 }
 }
 
-#newVM "dctest" "Windows2019_64" 2 2048 39 "./vm/dctest.vdi" 20480 $windowsServerIso $scriptsIso $exchangeIso
-#unattendedInstallTest "dctest" $windowsServerIso 1
-#mountScripts "dctest" $scriptsIso
-
-setupVM $ws #$dc $web $sql $mail $ws
+setupVM $dc $web $sql $mail $ws
