@@ -1,10 +1,10 @@
-# Windows server II
+# Windows server II: Documentatie
  **Naam: Ube Uyttendaele**
 
  **Klas: G3.B**
 ## Inhoudstabel
 
-- [Windows server II](#windows-server-ii)
+- [Windows server II: Documentatie](#windows-server-ii-documentatie)
 	- [Inhoudstabel](#inhoudstabel)
 	- [Vereisten](#vereisten)
 	- [Documentatie](#documentatie)
@@ -21,8 +21,27 @@
 			- [DNS(web)](#dnsweb)
 		- [Mail](#mail)
 		- [SQL](#sql)
-	- [Zoals bij de exchange heb je voor de sql server ook een iso nodig waarvan je de software installeert, om later op deze database te geraken via de clients.](#zoals-bij-de-exchange-heb-je-voor-de-sql-server-ook-een-iso-nodig-waarvan-je-de-software-installeert-om-later-op-deze-database-te-geraken-via-de-clients)
 		- [Workstations](#workstations)
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Vereisten
 * Virtualbox + extension
@@ -34,17 +53,6 @@
 
 ----
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 ## Documentatie
 ### Resource toekenning
 
@@ -54,13 +62,12 @@ __De resource toekenning kan nog mogelijks veranderen indien de huidige toekenni
 | Device    	|   Cores   |  Ram  	|  Opslag	  	|
 |---------------|-----------|-----------|---------------|
 |   dc 	    	|   2       |   2GiB	|  25GB	        |
-|   web 		|   2	    |   1GiB	|  25GB	        |
-|   mail    	| 	2       |   6GiB 	|  50GB         |
-| 	SQL			|	1		|	1GiB	|  25GB			|
-|   ws 	    	|   1	    |   1GiB	|  25GB 	    |
-| **Totaal**  	|	8		|	11GiB	|  150GB		|
+|   web 		|   2	    |   2GiB	|  20GB	        |
+|   mail    	| 	2       |   8GiB 	|  50GB         |
+| 	SQL			|	1		|	2GiB	|  25GB			|
+|   ws 	    	|   1	    |   4GiB	|  30GB 	    |
+| **Totaal**  	|	8		|	18GiB	|  150GB		|
 
-_Opmerking, ik probeer deze opstelleing te draaien op een laptop mat 14GB RAM te beschikking (16GB maar integrated graphics en os nemen deel in beslag) indien dit niet voldoende is kan ik overschakelen naar een computer met 32GB ram en zal het aantal ram aangepast worden_
 
 Hierboven vindt je een tabel met alle benodigdheden om deze opstelling te kunnen draaien op jouw host systeem en de ip addressen die aan de virtuele machines worden toegekend aan de hand van een powershell script of de DHCP server die draait op een van de servers. Met uizondering van de NAT adapter die op de domeincontroller "dc" staat. Deze krijgt een ip toegekend van een virtuele router die virtualbox aanmaakt op jouw host systeem om aan het internet aan te kunnen.
 
@@ -78,19 +85,11 @@ Storage wordt dynamisch gealloceerd, dus de vm neemt evenveel opslagruimte in be
 <br>
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 ### Netwerk diagram
 
-__Het netwerk diagram kan nog logelijks veranderen indien de rollen verplaatst worden naar een andere server__
-
 ![Netwerk diagram][netwerkDiagram]
-__Netwerkdiagram moet nog aangepast worden(sql server is nog niet toegevoegd)__
+
 
 | Device    	|   Type   	|  IP  					|  Gateway	  	| DNS						|
 |---------------|-----------|-----------------------|---------------|---------------------------|
@@ -98,10 +97,12 @@ __Netwerkdiagram moet nog aangepast worden(sql server is nog niet toegevoegd)__
 |    	    	|   static  | 192.168.22.1     		| /				| 192.168.22.1, 192.168.22.2|
 |   web 		|   static	| 192.168.22.2  		| 192.168.22.1	| 192.168.22.1, 192.168.22.2|
 |   mail    	| 	static  | 192.168.22.3  		| 192.168.22.1	| 192.168.22.1, 192.168.22.2|
-| 	SQL			|	static	| 192.168.22.4 			| 192.168.22.1	| 192.168.22.1, 192.168.22.2|
+| 	SQL			|	static	| 192.168.22.4 			| 192.168.22.1	| 192.168.22.1 |
 |   ws 	    	|   dhcp	| 192.168.22.101-150	| 192.168.22.1	| 192.168.22.1, 192.168.22.2|
 
 --------
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -167,7 +168,7 @@ Rollen:
 |-----------|-------|-------|-------|-------|-------|-------|-------|-------|
 |			|		|	X	|		|		|	X	|	X	|		|		|
 
-Deze server heeft **2 cores, 2GiB ram en 25GB opslag**, ten slotte krijgt deze server het static ip adres **192.168.22.2**
+Deze server heeft **2 cores, 2GiB ram en 20GB opslag**, ten slotte krijgt deze server het static ip adres **192.168.22.2**
 
 #### DHCP
 Deze server zal de dhcp server zijn voor dit netwerk. Dit is mogelijk door de rol `DHCP` te installeren, na het installeren van deze rol wordt er een scope aangemaakt met het ip range 192.168.22.101 tot 192.168.22.150. Dit zijn de ip adressen die worden toegekend aan clients die zich in het lan bevinden.
@@ -190,7 +191,7 @@ Deze server met de naam "mail" zal microsoft exchange draaien, hierdoor zullen d
 |-----------|-------|-------|-------|-------|-------|-------|-------|-------|
 |			|		|		|		|		|		|		|		|	X	|
 
-Deze server krijgt 2 cores, 6GiB ram en 50GB opslag en het statisch ip adress 192.168.22.3 toegewezen.
+Deze server krijgt **2 cores, 8GiB ram en 50GB opslag** en het statisch ip adress **192.168.22.3** toegewezen.
 
 Dit gaan we doen door aan de hand van de microsoft exchange 2019 iso, vervolgens zullen we de software installeren en zal de installer alle benodigheden installeren op de dc.
 
@@ -204,17 +205,19 @@ De sql server met de naam "SQL" zijn enigste taak is om een database ter beschik
 |-----------|-------|-------|-------|-------|-------|-------|-------|-------|
 |			|		|		|		|		|		|		|	X	|		|
 
-Deze server krijgt 1 cores, 1GiB ram en 25GB opslag en het statisch ip adress 192.168.22.4 toegewezen waarop de clients verbinding zullen maken om aan de databse te kunnen.
+Deze server krijgt **1 cores, 2GiB ram en 25GB opslag** en het statisch ip adress **192.168.22.4** toegewezen waarop de clients verbinding zullen maken om aan de databse te kunnen.
 
 Zoals bij de exchange heb je voor de sql server ook een iso nodig waarvan je de software installeert, om later op deze database te geraken via de clients.
+
 --------
 
 ### Workstations
 
-Vervolgens heb je de groep workstations, deze zullen een ip adres toegekend krijgen van de DHCP server die op "web" draait. Net zoals de rest van de toestellen zullen deze aangesloten zijn met een internal adapter op het netwerk "intnet". Deze computers krijgen 1 core, 1GiB ram en 25GB opslag.
+Vervolgens heb je de groep workstations, deze zullen een ip adres toegekend krijgen van de DHCP server die op "web" draait. Net zoals de rest van de toestellen zullen deze aangesloten zijn met een internal adapter op het netwerk "intnet". Deze computers krijgen **1 core, 4GiB ram en 30GB opslag**.
 
 Op deze computers zal er enkele software geinstalleerd worden. Deze zijn onderandere:
 
-* Firefox
 * Microsoft sql client
 * Remote management tool voor servers
+
+[netwerkDiagram]: ./Decumentatie/netwerkdiagram.png
