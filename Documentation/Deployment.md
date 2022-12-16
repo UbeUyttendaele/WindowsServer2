@@ -60,9 +60,9 @@ Een andere mogelijkheid is om het pad van de iso in het script te veranderen naa
 Bestand locaties:
 
 - SSMS-Setup-ENU.exe -> ./scripts/provisioning/ws/
+- Iso bestand -> ./scripts/iso/
 
 ----
-<br>
 <br>
 <br>
 <br>
@@ -102,7 +102,7 @@ Indien alles goed gaat zouden er 5 virtuele machines opstarten. De uitvoer zou e
 <br>
 
 ## VM configuratie
-Nu je vms opstaat zullen deze normaal een script oproepen.
+Nu je vms opstaan zullen deze normaal een script oproepen.
 DC zou uit zichzelf gestart moeten worden terwijl de andere wachten op een input.
 Dit is intentioneel omdat alle andere vms moeten wachten tot de DC klaar is met configureren.
 
@@ -122,8 +122,6 @@ Bij de laatste stap zal je 1x op enter moeten duwen zodat de optie Y wordt gekoz
 <br>
 <br>
 <br>
-<br>
-<br>
 
 ### Web, SQL en mail
 Nu de DC klaar is kunnen we de rest van de servers configureren.
@@ -136,6 +134,8 @@ Run deze in de volgende volgorde om fouten te vermijden:
 Indien web klaar is kan je ook beginnen aan de configuratie van de workstations.
 
 **Let op, bij enkele van deze servers moet je manueel dingen selecteren.**
+
+**Bij het installeren van de exchange servers worden er op het einde 2 user gevraagd. Geef hier de eerste keer sofie in en 2e keer bob**
 
 ----
 
