@@ -135,7 +135,7 @@ Indien web klaar is kan je ook beginnen aan de configuratie van de workstations.
 
 **Let op, bij enkele van deze servers moet je manueel dingen selecteren.**
 
-**Bij het installeren van de exchange servers worden er op het einde 2 user gevraagd. Geef hier de eerste keer sofie in en 2e keer bob**
+**Bij het installeren van de exchange servers kan het scherm mogelijks bevriezen bij de stap om .net te installeren. Druk op een toets als je denkt dat hij bevroren is, hij zal dan gewoon verder doen. Op het einde na de exchange installatie worden er 2 user gevraagd. Geef hier de eerste keer sofie in en 2e keer bob**
 
 ----
 
