@@ -83,7 +83,7 @@ switch ($deviceType) {
   mail {
     if (Should-Run-Step "1") {
 	    Write-Host "Executing stage 1 / user:$env:UserName" -ForegroundColor yellow
-	    Wait-For-Keypress "Before continuing the script wait until DC and Web are done configuring, press any key to continue..." 
+	    Wait-For-Keypress "Before continuing the script wait until DC is done configuring, press any key to continue..." 
       invoke-expression "C:\scripts\mail\stage1.ps1"
       Set-ItemProperty $RegPath "AutoAdminLogon" -Value "1" -type String 
       Set-ItemProperty $RegPath "DefaultUsername" -Value "WS2-2223-UBE\Administrator" -type String 

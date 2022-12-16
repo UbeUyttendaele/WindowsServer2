@@ -1,15 +1,16 @@
 set PATH=%PATH%;"C:\Program Files\Oracle\VirtualBox"
 $env:PATH = $env:PATH + ";C:\Program Files\Oracle\VirtualBox"
-. .\function.ps1
-$source_dir = ".\provisioning\"
-echo "Making script ISO"
-get-childitem $source_dir | New-IsoFile -path .\iso\scripts.iso -Force
-# Create a new VM
 $windowsServerIso=".\iso\server.iso"
 $exchangeIso=".\iso\exchange.iso"
 $windowsClientIso=".\iso\win10Client.iso"
 $sqlIso=".\iso\sql.iso"
 $scriptsIso=".\iso\scripts.iso"
+. .\function.ps1
+$source_dir = ".\provisioning\"
+echo "Making script ISO"
+get-childitem $source_dir | New-IsoFile -path $scriptsIso -Force
+# Create a new VM
+
 
 
 $dc="dc"
@@ -71,7 +72,7 @@ for($i=0; $i -lt $args.Count; $i++){
         $mail {
             echo "---------------------------"
             echo "Creating ${mail}"
-            newVM $args[$i] "Windows2019_64" 2 6144 39 "./vm/mail.vdi" 50000 $windowsServerIso $scriptsIso $exchangeIso | out-null
+            newVM $args[$i] "Windows2019_64" 2 8192 39 "./vm/mail.vdi" 50000 $windowsServerIso $scriptsIso $exchangeIso | out-null
             echo "Starting unattended install"
             unattendedInstall "mail" $windowsServerIso 1 $args[$i] 
             echo "Mounting scripts"
@@ -80,7 +81,7 @@ for($i=0; $i -lt $args.Count; $i++){
         $sql {
             echo "---------------------------"
             echo "Creating ${sql}"
-            newVM $args[$i] "Windows2019_64" 1 1024 39 "./vm/sql.vdi" 25000 $windowsServerIso $scriptsIso $exchangeIso | out-null
+            newVM $args[$i] "Windows2019_64" 1 2048 39 "./vm/sql.vdi" 25000 $windowsServerIso $scriptsIso $exchangeIso | out-null
             echo "Starting unattended install"
             unattendedInstall "sql" $windowsServerIso 1 $args[$i]
             echo "Mounting scripts"
@@ -90,7 +91,7 @@ for($i=0; $i -lt $args.Count; $i++){
             echo "---------------------------"
             $device = $args[$i]
             echo "Creating $device"
-            newVM $args[$i] "Windows10_64" 1 2048 128 "./vm/${device}.vdi" 30000 $windowsClientIso $scriptsIso $exchangeIso | out-null
+            newVM $args[$i] "Windows10_64" 1 4096 128 "./vm/${device}.vdi" 30000 $windowsClientIso $scriptsIso $exchangeIso | out-null
             echo "Starting unattended install"
             unattendedInstall "ws" $windowsClientIso 1 $args[$i]
             echo "Mounting scripts"
@@ -100,4 +101,4 @@ for($i=0; $i -lt $args.Count; $i++){
 }
 }
 
-setupVM $dc $web $sql $mail $ws
+setupVM $dc $mail $ws $web $sql

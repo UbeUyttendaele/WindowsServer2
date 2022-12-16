@@ -12,8 +12,7 @@ try {
     Write-Host "    Configuring network settings   " -ForegroundColor yellow
     Write-Host "-----------------------------------" -ForegroundColor yellow
     Write-Host "Requesting IP from dhcp server" -ForegroundColor yellow
-    ipconfig /renew -ErrorAction Stop | out-null
-
+    ipconfig /renew
 
     Write-Host "-----------------------------------" -ForegroundColor yellow
     Write-Host "        Installing SSMS            " -ForegroundColor yellow

@@ -68,7 +68,7 @@ try {
     Install-WindowsFeature $features -includeManagementTools -ErrorAction Stop | out-null
     write-host "Installing .NET 4.8" -ForegroundColor yellow
     curl https://download.visualstudio.microsoft.com/download/pr/014120d7-d689-4305-befd-3cb711108212/0fd66638cde16859462a6243a4629a50/ndp48-x86-x64-allos-enu.exe -o ndp48-x86-x64-allos-enu.exe 
-    Start-Process "ndp48-x86-x64-allos-enu.exe" -argumentlist "/install /norestart /q" -wait
+    Start-Process "ndp48-x86-x64-allos-enu.exe" -argumentlist "/install /quiet /norestart" -wait
     
     write-host "Installing Visual c++ 2013" -ForegroundColor yellow
     curl https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe -o 2013setup.exe
@@ -80,8 +80,9 @@ try {
 
     write-host "Installing rewrite module" -ForegroundColor yellow
     curl https://download.microsoft.com/download/1/2/8/128E2E22-C1B9-44A4-BE2A-5859ED1D4592/rewrite_amd64_en-US.msi -o rewrite_amd64_en-US.msi
-    msiexec /i rewrite_amd64_en-US.msi /norestart
+    Start-Process msiexec -argumentlist "/i rewrite_amd64_en-US.msi /norestart" -wait
 
+    write-host "Preparing exchange" -ForegroundColor yellow
     F:\ucmaredist\Setup.exe -q -wait
 
     Write-Host "-----------------------------------" -ForegroundColor yellow

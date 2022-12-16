@@ -5,7 +5,7 @@ try {
     Write-Host "        Enabling mailbox        " -ForegroundColor yellow
     Write-Host "-----------------------------------" -ForegroundColor yellow
     Write-Host "enabling mailbox" -ForegroundColor yellow
-    Get-User -OrganizationalUnit "OU=Users,DC=ws2-2223-ube,DC=hogent" -Filter * |  foreach-object {Enable-Mailbox}
+    Get-User -OrganizationalUnit "OU=operation-users,DC=ws2-2223-ube,DC=hogent" | foreach-object {Enable-Mailbox}
 }
 catch {
     Write-Host $("(Task failed: "+ $_.Exception.Message) -ForegroundColor red
