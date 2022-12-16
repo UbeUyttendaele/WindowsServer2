@@ -4,23 +4,44 @@
  **Klas: G3.B**
 ## Inhoudstabel
 
-- [Inhoudstabel](#inhoudstabel)
-- [Vereisten](#vereisten)
-- [Documentatie](#documentatie)
-	- [Resource toekenning](#resource-toekenning)
-	- [Netwerk diagram](#netwerk-diagram)
-	- [DC](#dc)
-		- [Active Directory](#active-directory)
-		- [DNS](#dns)
-		- [NAT](#nat)
-		- [Certificate authority](#certificate-authority)
-	- [Web](#web)
-		- [DHCP](#dhcp)
-		- [IIS](#iis)
-		- [DNS(web)](#dnsweb)
-	- [Mail](#mail)
-	- [SQL](#sql)
-	- [Workstations](#workstations)
+- [Windows server II: Documentatie](#windows-server-ii-documentatie)
+	- [Inhoudstabel](#inhoudstabel)
+	- [Vereisten](#vereisten)
+	- [Documentatie](#documentatie)
+		- [Resource toekenning](#resource-toekenning)
+		- [Netwerk diagram](#netwerk-diagram)
+		- [DC](#dc)
+			- [Active Directory](#active-directory)
+			- [DNS](#dns)
+			- [NAT](#nat)
+			- [Certificate authority](#certificate-authority)
+		- [Web](#web)
+			- [DHCP](#dhcp)
+			- [IIS](#iis)
+			- [DNS(web)](#dnsweb)
+		- [Mail](#mail)
+		- [SQL](#sql)
+		- [Workstations](#workstations)
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Vereisten
 * Virtualbox + extension
@@ -31,17 +52,6 @@
 * Powershell scripts die voorzien zijn
 
 ----
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 ## Documentatie
 ### Resource toekenning
@@ -72,23 +82,12 @@ Storage wordt dynamisch gealloceerd, dus de vm neemt evenveel opslagruimte in be
 <br>
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+
 
 ### Netwerk diagram
 
-__Het netwerk diagram kan nog logelijks veranderen indien de rollen verplaatst worden naar een andere server__
-
 ![Netwerk diagram][netwerkDiagram]
-__Netwerkdiagram moet nog aangepast worden(sql server is nog niet toegevoegd)__
+
 
 | Device    	|   Type   	|  IP  					|  Gateway	  	| DNS						|
 |---------------|-----------|-----------------------|---------------|---------------------------|
@@ -96,10 +95,12 @@ __Netwerkdiagram moet nog aangepast worden(sql server is nog niet toegevoegd)__
 |    	    	|   static  | 192.168.22.1     		| /				| 192.168.22.1, 192.168.22.2|
 |   web 		|   static	| 192.168.22.2  		| 192.168.22.1	| 192.168.22.1, 192.168.22.2|
 |   mail    	| 	static  | 192.168.22.3  		| 192.168.22.1	| 192.168.22.1, 192.168.22.2|
-| 	SQL			|	static	| 192.168.22.4 			| 192.168.22.1	| 192.168.22.1, 192.168.22.2|
+| 	SQL			|	static	| 192.168.22.4 			| 192.168.22.1	| 192.168.22.1 |
 |   ws 	    	|   dhcp	| 192.168.22.101-150	| 192.168.22.1	| 192.168.22.1, 192.168.22.2|
 
 --------
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -205,6 +206,7 @@ De sql server met de naam "SQL" zijn enigste taak is om een database ter beschik
 Deze server krijgt 1 cores, 1GiB ram en 25GB opslag en het statisch ip adress 192.168.22.4 toegewezen waarop de clients verbinding zullen maken om aan de databse te kunnen.
 
 Zoals bij de exchange heb je voor de sql server ook een iso nodig waarvan je de software installeert, om later op deze database te geraken via de clients.
+
 --------
 
 ### Workstations
@@ -213,6 +215,7 @@ Vervolgens heb je de groep workstations, deze zullen een ip adres toegekend krij
 
 Op deze computers zal er enkele software geinstalleerd worden. Deze zijn onderandere:
 
-* Firefox
 * Microsoft sql client
 * Remote management tool voor servers
+
+[netwerkDiagram]: ./Decumentatie/netwerkdiagram.png
