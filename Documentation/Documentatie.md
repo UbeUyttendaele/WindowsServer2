@@ -1,28 +1,26 @@
-# Windows server II
+# Windows server II: Documentatie
  **Naam: Ube Uyttendaele**
 
  **Klas: G3.B**
 ## Inhoudstabel
 
-- [Windows server II](#windows-server-ii)
-	- [Inhoudstabel](#inhoudstabel)
-	- [Vereisten](#vereisten)
-	- [Documentatie](#documentatie)
-		- [Resource toekenning](#resource-toekenning)
-		- [Netwerk diagram](#netwerk-diagram)
-		- [DC](#dc)
-			- [Active Directory](#active-directory)
-			- [DNS](#dns)
-			- [NAT](#nat)
-			- [Certificate authority](#certificate-authority)
-		- [Web](#web)
-			- [DHCP](#dhcp)
-			- [IIS](#iis)
-			- [DNS(web)](#dnsweb)
-		- [Mail](#mail)
-		- [SQL](#sql)
-	- [Zoals bij de exchange heb je voor de sql server ook een iso nodig waarvan je de software installeert, om later op deze database te geraken via de clients.](#zoals-bij-de-exchange-heb-je-voor-de-sql-server-ook-een-iso-nodig-waarvan-je-de-software-installeert-om-later-op-deze-database-te-geraken-via-de-clients)
-		- [Workstations](#workstations)
+- [Inhoudstabel](#inhoudstabel)
+- [Vereisten](#vereisten)
+- [Documentatie](#documentatie)
+	- [Resource toekenning](#resource-toekenning)
+	- [Netwerk diagram](#netwerk-diagram)
+	- [DC](#dc)
+		- [Active Directory](#active-directory)
+		- [DNS](#dns)
+		- [NAT](#nat)
+		- [Certificate authority](#certificate-authority)
+	- [Web](#web)
+		- [DHCP](#dhcp)
+		- [IIS](#iis)
+		- [DNS(web)](#dnsweb)
+	- [Mail](#mail)
+	- [SQL](#sql)
+	- [Workstations](#workstations)
 
 ## Vereisten
 * Virtualbox + extension
